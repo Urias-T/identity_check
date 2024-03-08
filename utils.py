@@ -44,5 +44,5 @@ def verify_id(image1_format, image2_format, name):
             return "Verified"
         
         else:
-            return "Name mismatch"
+            return "name_mismatch"
 
