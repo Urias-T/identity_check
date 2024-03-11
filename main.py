@@ -1,12 +1,13 @@
-import io
-import json
 import os
 import shutil
+import logging
 from flask import Flask, request, jsonify, make_response
 
 from utils import verify_id
 
 app = Flask(__name__)
+
+logging.basicConfig(level=logging.ERROR)
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 
@@ -16,18 +17,18 @@ def verify():
     if "image1" not in request.files or "image2" not in request.files:
         return jsonify({"error": "Missing image files!"}), 400
     
-    image1 = request.files["image1"]  # Live Image
-    image2 = request.files["image2"]  # ID
+    live_image = request.files["image1"]  # Live Image
+    id_image = request.files["image2"]  # ID
 
     name = request.form["name"]
 
-    image1_format = image1.mimetype.split("/")[1]
-    image2_format = image2.mimetype.split("/")[1]
+    live_image_format = live_image.mimetype.split("/")[1]
+    id_image_format = id_image.mimetype.split("/")[1]
 
-    if image1.filename == "" or image2.filename == "":
+    if live_image.filename == "" or id_image.filename == "":
         return jsonify({"error": "No selected file"}), 400
     
-    if image1_format not in ALLOWED_EXTENSIONS or image2_format not in ALLOWED_EXTENSIONS:
+    if live_image_format not in ALLOWED_EXTENSIONS or id_image_format not in ALLOWED_EXTENSIONS:
         return jsonify({"error": "Invalid file format"}), 400
     
     try:
@@ -35,11 +36,11 @@ def verify():
         os.mkdir("temp")
 
 
-        image1.save(f"temp/live_image.{image1_format}")
-        image2.save(f"temp/id_image.{image2_format}")
+        live_image.save(f"temp/live_image.{live_image_format}")
+        id_image.save(f"temp/id_image.{id_image_format}")
 
 
-        result = verify_id(image1_format=image1_format, image2_format=image2_format, name=name)
+        result = verify_id(live_image_format=live_image_format, id_image_format=id_image_format, name=name)
 
         shutil.rmtree("temp")
 
@@ -71,6 +72,8 @@ def verify():
                             }), 401
         
     except Exception as e:
+        logging.error(f"{str(e)} error occured.")
+
         if os.path.exists("temp"):
             shutil.rmtree("temp")
 
