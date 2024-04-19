@@ -63,12 +63,13 @@ That's it! The service is now up and running on ```localhost:8080```. 🤗
 - Supported file types for image uploads: jpg, jpeg, png
 
 **Example Usage:**
-```bash
-curl -X POST \
-  -F 'image1=@live_image.jpg' \
-  -F 'image2=@id_image.jpg' \
-  -F 'name=John Doe' \
-  http://localhost:8080/verify
+```json
+{
+  "image1": "live_image.jpg",
+  "image2": "id_image.jpg",
+  "name": "John Doe"
+}
+
 ```
 
 **Response Codes:**
@@ -96,7 +97,7 @@ curl -X POST \
 ```json
     {
         "status": "Failure",
-        "message": "Face Mismatch",
+        "message": "Verification failed. Live image does not match ID image.",
         "details": {
             "face_match": false,
             "name_match": false
@@ -109,7 +110,7 @@ curl -X POST \
 ```json
     {
         "status": "Failure",
-        "message": "Name Mismatch",
+        "message": "Verification failed. Provided name doesn't match that on ID.",
         "details": {
             "face_match": true,
             "name_match": false
@@ -121,7 +122,7 @@ curl -X POST \
 ```json
 {
     "status": "Error",
-    "message": "An error occurred",
+    "message": "An error occurred.",
     "details": {
         "error": "<error_message>"
     }
