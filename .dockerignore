@@ -1,0 +1,10 @@
+# virtual environment
+venv/
+
+# cache files
+__pycache__/
+
+# test files
+*.ipynb
+*.jpg
+*.png
