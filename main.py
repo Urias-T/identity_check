@@ -55,7 +55,7 @@ def verify():
         
         elif result == "face_mismatch":
             return jsonify({"status": "Failure",
-                            "message": "Face Mismatch",
+                            "message": "Verification failed. Live image does not match ID image.",
                             "details": {
                                 "face_match": False,
                                 "name_match": False
@@ -64,7 +64,7 @@ def verify():
         
         elif result == "name_mismatch":
             return jsonify({"status": "Failure",
-                            "message": "Name Mismatch",
+                            "message": "Verification failed. Provided name doesn't match that on ID.",
                             "details": {
                                 "face_match": True,
                                 "name_match": False
