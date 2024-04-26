@@ -47,6 +47,39 @@ python main.py
 
 That's it! The service is now up and running on ```localhost:8080```. 🤗
 
+### With Docker 🐋
+
+To run this as a docker container:
+
+Clone the repository :
+
+```
+git clone https://github.com/Urias-T/identity_check.git
+```
+
+Navigate to the project directory :
+
+```
+cd identity_check
+```
+
+Build the Docker image:
+
+```
+docker build -t identity_check .
+```
+
+*Take note to include the dot at the end of the docker command above*
+
+Run the Docker container:
+
+```
+docker run -p 8080:8080 -d identity_check
+```
+
+Congratulations, your service will be running on ```localhost:8080``` 🎉
+
+
 ## Endpoint Documentation 📖
 
 **Endpoint:**
