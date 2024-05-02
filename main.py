@@ -48,6 +48,7 @@ def verify():
     
     try:
 
+
         os.mkdir("temp")
 
 
@@ -85,6 +86,13 @@ def verify():
                                 "name_match": False
                             }
                             }), 401
+        
+    except ValueError as e:
+        return jsonify({"status": "Error",
+                        "message": "An error occured",
+                        "details": {
+                            "error": "There was no face in at least one of the images."
+                        }}), 400
         
     except Exception as e:
         logging.error(f"{str(e)} error occured.")
