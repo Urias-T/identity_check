@@ -107,7 +107,7 @@ Congratulations, your service will be running on ```localhost:8080``` 🎉
 
 **Response Codes:**
 - 200: Successful verification.
-- 400: Bad request - Missing image files, no selected file, or invalid file format.
+- 400: Bad request - Missing image file(s), no selected file, no face detected in image(s), or invalid file format.
 - 401: Unauthorized - Face mismatch or name mismatch.
 - 500: Internal Server Error - An unexpected error occurred during the verification process.
 
@@ -125,7 +125,52 @@ Congratulations, your service will be running on ```localhost:8080``` 🎉
 }
 ```
 
-2. Failure Response (HTTP 401):
+2. Bad Request (HTTP 400):
+- Missing Image File(s):
+```json
+    {
+        "status": "Error",
+        "message": "Invalid Request",
+        "details": {
+             "error": "Missing image file(s)!"
+         }
+    }
+```
+
+- No Selected File(s):
+```json
+      {
+          "status": "Error",
+          "message": "Invalid Request",
+           "details": {
+               "error": "No selected file(s)"
+            }
+     }
+```
+
+- No face detected in image(s):
+```json
+      {
+          "status": "Error",
+          "message": "An error occured",
+           "details": {
+               "error": "There was no face in at least one of the images."
+            }
+     }
+```
+
+- Invalid file format:
+```json
+      {
+          "status": "Error",
+          "message": "Invalid Request",
+           "details": {
+               "error": "Invalid file format(s)"
+            }
+     }
+```
+
+3. Failure Response (HTTP 401):
 - Face Mismatch:
 ```json
     {
@@ -151,7 +196,7 @@ Congratulations, your service will be running on ```localhost:8080``` 🎉
     }
 ```
 
-3. Error Response (HTTP 500):
+4. Error Response (HTTP 500):
 ```json
 {
     "status": "Error",
@@ -165,6 +210,7 @@ Congratulations, your service will be running on ```localhost:8080``` 🎉
 **Error Conditions:**
 - If any required parameter is missing, the endpoint will return a 400 error with an appropriate error message.
 - If the selected file for either image is empty or the file format is not supported, a 400 error will be returned.
+- If there is no image detected in any of the images, the endpoint would return a 400 error with an appropriate error message.
 - In case of face or name mismatch, the endpoint returns a 401 error with details indicating the reason for failure.
 - If an unexpected error occurs during the verification process, a 500 error will be returned with details of the error.
 
