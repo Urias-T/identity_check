@@ -15,23 +15,39 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 @app.route("/verify", methods=["POST"])
 def verify():
     if "image1" not in request.files or "image2" not in request.files:
-        return jsonify({"error": "Missing image files!"}), 400
+        return jsonify({"status": "Error",
+                        "message": "Invalid Request",
+                        "details": {
+                            "error": "Missing image file(s)!"
+                        }
+                        }), 400
     
     live_image = request.files["image1"]  # Live Image
     id_image = request.files["image2"]  # ID
+
+    if live_image.filename == "" or id_image.filename == "":
+        return jsonify({"status": "Error",
+                        "message": "Invalid Request",
+                        "details": {
+                            "error": "No selected file(s)"
+                        }
+                        }), 400
 
     name = request.form["name"]
 
     live_image_format = live_image.mimetype.split("/")[1]
     id_image_format = id_image.mimetype.split("/")[1]
 
-    if live_image.filename == "" or id_image.filename == "":
-        return jsonify({"error": "No selected file"}), 400
-    
     if live_image_format not in ALLOWED_EXTENSIONS or id_image_format not in ALLOWED_EXTENSIONS:
-        return jsonify({"error": "Invalid file format"}), 400
+        return jsonify({"status": "Error",
+                        "message": "Invalid Request",
+                        "details": {
+                            "error": "Invalid file format(s)"
+                        }
+                        }), 400
     
     try:
+
 
         os.mkdir("temp")
 
@@ -70,6 +86,13 @@ def verify():
                                 "name_match": False
                             }
                             }), 401
+        
+    except ValueError as e:
+        return jsonify({"status": "Error",
+                        "message": "An error occured",
+                        "details": {
+                            "error": "There was no face in at least one of the images."
+                        }}), 400
         
     except Exception as e:
         logging.error(f"{str(e)} error occured.")
